@@ -6,6 +6,7 @@ from werkzeug.utils import secure_filename
 from werkzeug import SharedDataMiddleware
 import statistics
 from werkzeug.utils import secure_filename
+import re
 
 UPLOAD_FOLDER = './uploads'
 ALLOWED_EXTENSIONS = set(['txt'])
@@ -31,7 +32,7 @@ class Formdata(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.DateTime, default=datetime.now)
     filename = db.Column(db.String)
-    data = db.Column(db.String)
+    data = db.Column(db.Integer)
 
     def __init__(self, filename, data):
         self.filename = filename
@@ -59,7 +60,7 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return render_template('home.html')
+            return render_template('dataFiles.html')
             #redirect(url_for('uploaded_file',
                     #                filename=filename))
     return render_template('home.html')
@@ -69,19 +70,13 @@ def upload_file():
 def home():
     return render_template('home.html')
 
-# Do zrobienia:
-@app.route('/poll')
-def poll():
-    return render_template('poll.html')
+@app.route('/uploadData')
+def uploadData():
+    return render_template('uploadData.html')
 
-#do zrobienia
-@app.route('/dane')   #<- widok z którego można się wybrać do surowych lub obrobionych danych
-def dane():
-    return render_template('dane.html')
 
-#do zrobienia
-@app.route('/raw')
-def raw():
+@app.route('/dataFiles')
+def dataFiles():
     list = os.listdir("uploads")
     if(len(list) != db.session.query(Formdata).count()):
         for i in list:
@@ -94,9 +89,32 @@ def raw():
                 db.session.commit()
     fd=db.session.query(Formdata).all()
 
-    return render_template('raw.html', formdata=fd)
+    return render_template('dataFiles.html', formdata=fd)
+
+@app.route('/processed', methods = ["GET", "POST"] )
+def processed():
+    if request.method == 'POST':
+
+        path = "uploads/" + request.form['selectFile']
+        data = open(path).read()
+        #split data
 
 
+
+    data = re.findall(r'[0-9]+', data)
+    i = 1
+    dataY = []
+    dataX = []
+    for num in data:
+        if i%2 == 1:
+            dataY.append(int(num))
+            i+=1
+        else:
+            dataX.append(int(num))
+            i+=1
+
+
+    return render_template('processed.html', dataY = dataY, dataX = dataX)
 
 
 if __name__ == "__main__":
