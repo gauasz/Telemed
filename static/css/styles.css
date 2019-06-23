@@ -1,0 +1,19 @@
+html,
+body {
+    height: 100%
+}
+
+.welcome-box {
+    display: flex;
+    background-color: rgb(224, 224, 224);
+    flex-direction: column;
+    text-align: justify;
+}
+
+.welcome-box-header {
+    text-align: center;
+}
+
+.add-data-header {
+    margin: 45px 0px;
+}
