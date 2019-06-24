@@ -105,7 +105,7 @@ def processed():
         
         for i in range(int(len(data)/2)):
 
-            data_list.append([int(data[2*i]), int(data[(2*i)+1])])
+            data_list.append([int(data[(2*i)+1]), int(data[2*i])])
 
 
 
