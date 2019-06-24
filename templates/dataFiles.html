@@ -1,0 +1,19 @@
+{% extends 'header.html' %}
+{% block content %}
+
+<div class="container mx-5 my-5">
+
+    <div class="page-header">
+        <h1>Dostępne pliki</h1><br>
+    </div>
+
+    <form action="/processed" method="post">
+        {%for i in formdata %}
+        <input type = "radio" name = "selectFile" value = {{ i.filename }}> {{ i.filename }}<br>
+        {% endfor %}
+        <br><input type= "submit" value = "Wyświetl">
+    </form>
+
+</div>
+
+{% endblock %}
