@@ -99,22 +99,18 @@ def processed():
         data = open(path).read()
         #split data
 
+        data = re.findall(r'[0-9]+', data)
+        data_list = []
+
+        
+        for i in range(int(len(data)/2)):
+
+            data_list.append([int(data[2*i]), int(data[(2*i)+1])])
 
 
-    data = re.findall(r'[0-9]+', data)
-    i = 1
-    dataY = []
-    dataX = []
-    for num in data:
-        if i%2 == 1:
-            dataY.append(int(num))
-            i+=1
-        else:
-            dataX.append(int(num))
-            i+=1
 
 
-    return render_template('processed.html', dataY = dataY, dataX = dataX)
+    return render_template('processed.html', data_list = data_list)
 
 
 if __name__ == "__main__":
